@@ -1,0 +1,56 @@
+fib = \n ->
+ #eq_int 0 n
+  0
+  ( #eq_int 1 n
+   1
+   ( #plus (fib (#plus n (-1))) (fib (#plus n (-2)))
+   )
+  );
+
+nil = \r x -> r;
+cons = \h t a f -> f h t;
+match = \a f m -> m a f;
+tail = match nil (\h t -> t);
+map = \f -> match nil (\h t -> cons (f h) (map f t));
+foldr = \a f -> match a (\h t -> f h (foldr a f t));
+sum = foldr 0 #plus;
+
+id = \a -> a;
+
+nothing = \n j -> n;
+just = \a n j -> j a;
+
+head = \m -> m nothing (\h t -> just h);
+
+take = \n l ->
+ #eq_int 0 n
+   nil
+   ( match
+     nil
+     (\h t -> cons h (take (#plus n (-1)) t))
+     l
+   );
+
+at = \n l ->
+ #eq_int 0 n
+  ( head l )
+  ( match
+    nothing
+    ( \_h t -> at (#plus n (-1)) t )
+    l
+  );
+
+zipWith = \f as bs ->
+ match nil
+  (\a asr ->
+   match nil
+    (\b bsr ->
+     cons (f a b) (zipWith f asr bsr))
+    bs)
+  as;
+
+fibs = cons 0 (cons 1 (zipWith #plus fibs (tail fibs)));
+
+fib2 = \n -> at n fibs (-1) id;
+
+fix = \f -> f (fix f);
