@@ -57,4 +57,7 @@ main = do
       , "Fix works" ~:
           checkExpression testDefs 20
             "sum (take 10 (fix (cons 2)))"
+      , "Untyped fix works" ~:
+          checkExpression testDefs 20
+            "sum (take 10 (fixUntyped (cons 2)))"
       ]

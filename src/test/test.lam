@@ -54,3 +54,4 @@ fibs = cons 0 (cons 1 (zipWith #plus fibs (tail fibs)));
 fib2 = \n -> at n fibs (-1) id;
 
 fix = \f -> f (fix f);
+fixUntyped = \f -> (\x -> f (x x)) (\x -> f (x x));
